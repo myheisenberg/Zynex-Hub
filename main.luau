@@ -132,6 +132,12 @@ local luckyIslands = {
     keyless = true
 }
 
+local wordPlay = {
+    name = "Word Play",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/2e3d136e798d939414cf6421c2f95f2eb94fc73ed8ce9ecb0b01cb22593f4cf3/download",
+    keyless = false
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -209,6 +215,10 @@ local Games = {
     -- Lucky Islands
     [18134283205]     = luckyIslands, -- Active PlaceId
     [6147671296]      = luckyIslands, -- GameId / UniverseId
+
+    -- Word Play / Name Them All
+    [99066225512279]  = wordPlay, -- Active PlaceId
+    [10774657974]     = wordPlay, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -252,6 +262,8 @@ if not matchedGame then
         matchedGame = roChess
     elseif currentGameId == 6147671296 or currentPlaceId == 18134283205 then
         matchedGame = luckyIslands
+    elseif currentGameId == 10774657974 or currentPlaceId == 99066225512279 then
+        matchedGame = wordPlay
     end
 end
 
