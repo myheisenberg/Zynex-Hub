@@ -54,6 +54,12 @@ local doNotStop = {
     keyless = false
 }
 
+local findTheCountry = {
+    name = "Find The Country",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/a6b718707c72905652af01a011d56ae79ce1a95e38a2bacf2fb25ba15368a8bf/download",
+    keyless = false
+}
+
 local fisch = {
     name = "Fisch",
     url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download",
@@ -120,6 +126,10 @@ local Games = {
     [116779912472448] = doNotStop, -- Active PlaceId
     [10772946647]     = doNotStop, -- GameId / UniverseId
 
+    -- Find The Country
+    [100321734959591] = findTheCountry, -- Active PlaceId
+    [10770370806]     = findTheCountry, -- GameId / UniverseId
+
     -- Fisch
     [121864768012064] = fisch, -- Active Fisch Place
     [6701277882]      = fisch, -- Active Fisch GameId / UniverseId
@@ -166,6 +176,8 @@ if not matchedGame then
         matchedGame = dandysWorld
     elseif currentGameId == 10772946647 or currentPlaceId == 116779912472448 then
         matchedGame = doNotStop
+    elseif currentGameId == 10770370806 or currentPlaceId == 100321734959591 then
+        matchedGame = findTheCountry
     elseif currentGameId == 6701277882 or currentPlaceId == 121864768012064 or currentGameId == 5750914919 or currentPlaceId == 16732694052 then
         matchedGame = fisch
     elseif currentGameId == 10769259605 or currentPlaceId == 104488514364885 then
