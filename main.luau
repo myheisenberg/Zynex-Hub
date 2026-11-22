@@ -70,8 +70,10 @@ local Games = {
     [5569032992]      = dandysWorld, -- GameId / UniverseId
 
     -- Fisch
-    [16732694052]     = fisch, -- Main Place
-    [5750914919]      = fisch, -- GameId / UniverseId
+    [121864768012064] = fisch, -- Active Fisch Place
+    [6701277882]      = fisch, -- Active Fisch GameId / UniverseId
+    [16732694052]     = fisch, -- Root Place
+    [5750914919]      = fisch, -- UniverseId
 }
 
 -- Game Detection
@@ -87,7 +89,7 @@ if not matchedGame then
         matchedGame = robloxStockExchange2
     elseif currentGameId == 5569032992 or currentPlaceId == 16116270224 then
         matchedGame = dandysWorld
-    elseif currentGameId == 5750914919 or currentPlaceId == 16732694052 then
+    elseif currentGameId == 6701277882 or currentPlaceId == 121864768012064 or currentGameId == 5750914919 or currentPlaceId == 16732694052 then
         matchedGame = fisch
     end
 end
