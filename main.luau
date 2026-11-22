@@ -69,6 +69,11 @@ local unstableSMP = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/cd3e9fe99fb58b5b4eb32d2a98393cbadcf1050b83388380782da06148303c9d/download"
 }
 
+local voxelWars = {
+    name = "Voxel Wars",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/e780aacca2adb1ef70d0eb514166ac21a68a90c5c40478b010748db495aa23ee/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -110,6 +115,10 @@ local Games = {
     -- Unstable SMP
     [76870565041704]  = unstableSMP, -- Active PlaceId
     [10772281976]     = unstableSMP, -- GameId / UniverseId
+
+    -- Voxel Wars
+    [78884249003161]  = voxelWars, -- Active PlaceId
+    [10773416193]     = voxelWars, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -135,6 +144,8 @@ if not matchedGame then
         matchedGame = chessDuels
     elseif currentGameId == 10772281976 or currentPlaceId == 76870565041704 then
         matchedGame = unstableSMP
+    elseif currentGameId == 10773416193 or currentPlaceId == 78884249003161 then
+        matchedGame = voxelWars
     end
 end
 
