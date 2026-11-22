@@ -324,30 +324,6 @@ SubTitle.AutoLocalize = false
 SubTitle.ZIndex = 5
 SubTitle.Parent = Header
 
--- Close Button
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Name = "CloseBtn"
-CloseBtn.Text = "✕"
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.TextSize = 13
-CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 155)
-CloseBtn.BackgroundTransparency = 1
-CloseBtn.Size = UDim2.fromOffset(24, 24)
-CloseBtn.Position = UDim2.new(1, -34, 0, 14)
-CloseBtn.ZIndex = 6
-CloseBtn.AutoButtonColor = false
-CloseBtn.Parent = Card
-
-CloseBtn.MouseEnter:Connect(function()
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-end)
-CloseBtn.MouseLeave:Connect(function()
-    CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 155)
-end)
-CloseBtn.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
-end)
-
 -- Body Area
 local Body = Instance.new("Frame")
 Body.Name = "Body"
@@ -610,7 +586,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
 
     verifying = true
     VerifyBtn.Text = "Checking..."
-    StatusLabel.Text = "Validating key with JNKIE servers..."
+    StatusLabel.Text = "Validating key..."
     StatusLabel.TextColor3 = Color3.fromRGB(180, 180, 185)
 
     task.spawn(function()
