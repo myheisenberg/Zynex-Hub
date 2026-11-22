@@ -29,18 +29,35 @@ local cheatDuringTest = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download"
 }
 
+local sniperArena = {
+    name = "Sniper Arena",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/64d06cf7501d53d848204c2f2ebb6968427817d0e3e2d6240cb8e0b01e3b4879/download"
+}
+
 local Games = {
-    [98894876188248] = cheatDuringTest, -- Lobby / Main Menu
+    -- Cheat During Test
+    [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
     [108920407787474] = cheatDuringTest, -- Classroom Exam
     [16116270224]     = cheatDuringTest, -- Alternate Place
+    [5642875323]      = cheatDuringTest, -- GameId
+
+    -- Sniper Arena
+    [119259569670784] = sniperArena, -- Main / Lobby Place
+    [126042865144779] = sniperArena, -- Match Sub-Place
+    [122446657157717] = sniperArena, -- Lobby Sub-Place
+    [9534705677]      = sniperArena, -- GameId / UniverseId
 }
 
 -- Game Detection
 local currentPlaceId = game.PlaceId
 local currentGameId = game.GameId
 local matchedGame = Games[currentPlaceId] or Games[currentGameId]
-if not matchedGame and (currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224) then
-    matchedGame = Games[98894876188248]
+if not matchedGame then
+    if currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224 then
+        matchedGame = cheatDuringTest
+    elseif currentGameId == 9534705677 or currentPlaceId == 119259569670784 or currentPlaceId == 126042865144779 or currentPlaceId == 122446657157717 then
+        matchedGame = sniperArena
+    end
 end
 
 -- Clipboard Helper
