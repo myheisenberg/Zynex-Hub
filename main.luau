@@ -138,6 +138,12 @@ local wordPlay = {
     keyless = false
 }
 
+local drawTheOtherHalf = {
+    name = "Draw The Other Half",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/9fc4981cc5c9a7d09954054110ba2eff4dd8b8ea62809b007529ff488c23fb61/download",
+    keyless = true
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -219,6 +225,10 @@ local Games = {
     -- Word Play / Name Them All
     [99066225512279]  = wordPlay, -- Active PlaceId
     [10774657974]     = wordPlay, -- GameId / UniverseId
+
+    -- Draw The Other Half
+    [122701511178560] = drawTheOtherHalf, -- Active PlaceId
+    [10773244575]     = drawTheOtherHalf, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -264,6 +274,8 @@ if not matchedGame then
         matchedGame = luckyIslands
     elseif currentGameId == 10774657974 or currentPlaceId == 99066225512279 then
         matchedGame = wordPlay
+    elseif currentGameId == 10773244575 or currentPlaceId == 122701511178560 then
+        matchedGame = drawTheOtherHalf
     end
 end
 
