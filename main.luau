@@ -126,6 +126,12 @@ local roChess = {
     keyless = false
 }
 
+local luckyIslands = {
+    name = "Lucky Islands",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/3bffd27067569b90406711091d7968dfc8f73fa294ec3c8c001907d0233cb3f4/download",
+    keyless = true
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -199,6 +205,10 @@ local Games = {
     -- RoChess
     [130878180532794] = roChess, -- Active PlaceId
     [10773907070]     = roChess, -- GameId / UniverseId
+
+    -- Lucky Islands
+    [18134283205]     = luckyIslands, -- Active PlaceId
+    [6147671296]      = luckyIslands, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -240,6 +250,8 @@ if not matchedGame then
         matchedGame = streamer
     elseif currentGameId == 10773907070 or currentPlaceId == 130878180532794 then
         matchedGame = roChess
+    elseif currentGameId == 6147671296 or currentPlaceId == 18134283205 then
+        matchedGame = luckyIslands
     end
 end
 
