@@ -108,6 +108,12 @@ local respectPVP = {
     keyless = true
 }
 
+local pixelFlag = {
+    name = "PixelFlag",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/061011d303cb70e8feffeff9552927ccf4ab970c7095ea24216e5676c7e8d638/download",
+    keyless = true
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -169,6 +175,10 @@ local Games = {
     -- Respect PVP
     [103921126484906] = respectPVP, -- Active PlaceId
     [10772490127]     = respectPVP, -- GameId / UniverseId
+
+    -- PixelFlag
+    [133787291114459] = pixelFlag, -- Active PlaceId
+    [10770104321]     = pixelFlag, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -204,6 +214,8 @@ if not matchedGame then
         matchedGame = voxelWars
     elseif currentGameId == 10772490127 or currentPlaceId == 103921126484906 then
         matchedGame = respectPVP
+    elseif currentGameId == 10770104321 or currentPlaceId == 133787291114459 then
+        matchedGame = pixelFlag
     end
 end
 
