@@ -26,52 +26,62 @@ local PROVIDER = "work.ink"
 -- Supported Games Table
 local cheatDuringTest = {
     name = "Cheat During Test",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
+    keyless = false
 }
 
 local sniperArena = {
     name = "Sniper Arena",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/64d06cf7501d53d848204c2f2ebb6968427817d0e3e2d6240cb8e0b01e3b4879/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/64d06cf7501d53d848204c2f2ebb6968427817d0e3e2d6240cb8e0b01e3b4879/download",
+    keyless = false
 }
 
 local robloxStockExchange2 = {
     name = "Roblox Stock Exchange 2",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/20479e65a8fc589c66159a00473e2a4a80ab0f7b3885f63fd92345121bac15c9/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/20479e65a8fc589c66159a00473e2a4a80ab0f7b3885f63fd92345121bac15c9/download",
+    keyless = true
 }
 
 local dandysWorld = {
     name = "Dandy's World",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/3d869ff1109db81e1738cf2fecf75c656bb9ca5d91a918cc683e1131759fe2fd/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/3d869ff1109db81e1738cf2fecf75c656bb9ca5d91a918cc683e1131759fe2fd/download",
+    keyless = false
 }
 
 local fisch = {
     name = "Fisch",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download",
+    keyless = true
 }
 
 local solveTheCube = {
     name = "Solve The Cube",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/e5aeb6002b88aa8e72e347482f023ee2d2c60710a95976a4ad9fb9ffcb6cf44e/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/e5aeb6002b88aa8e72e347482f023ee2d2c60710a95976a4ad9fb9ffcb6cf44e/download",
+    keyless = true
 }
 
 local ragdollPlayground = {
     name = "Ragdoll Playground",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/7129d32efe7445cbf4cfa7d98a17da324c0683a90099f0d82538644eddcec7b8/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/7129d32efe7445cbf4cfa7d98a17da324c0683a90099f0d82538644eddcec7b8/download",
+    keyless = true
 }
 
 local chessDuels = {
     name = "Chess Duels",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/4bac3b2ec5c89f3d0471ac4d257086fcf2dda83fa9de8a1342c21dea3eec56e3/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/4bac3b2ec5c89f3d0471ac4d257086fcf2dda83fa9de8a1342c21dea3eec56e3/download",
+    keyless = true
 }
 
 local unstableSMP = {
     name = "Unstable SMP",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/cd3e9fe99fb58b5b4eb32d2a98393cbadcf1050b83388380782da06148303c9d/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/cd3e9fe99fb58b5b4eb32d2a98393cbadcf1050b83388380782da06148303c9d/download",
+    keyless = true
 }
 
 local voxelWars = {
     name = "Voxel Wars",
-    url = "https://api.jnkie.com/api/v1/luascripts/public/e780aacca2adb1ef70d0eb514166ac21a68a90c5c40478b010748db495aa23ee/download"
+    url = "https://api.jnkie.com/api/v1/luascripts/public/e780aacca2adb1ef70d0eb514166ac21a68a90c5c40478b010748db495aa23ee/download",
+    keyless = true
 }
 
 local Games = {
@@ -220,6 +230,12 @@ local function LaunchMainScript(key)
     if matchedGame then
         loadstring(game:HttpGet(matchedGame.url))()
     end
+end
+
+-- Instant Keyless Bypass (KULLANICININ KESIN KURALI: Keyless oyunlarda asla key ekrani acilmaz)
+if matchedGame and matchedGame.keyless then
+    LaunchMainScript("KEYLESS")
+    return
 end
 
 -- Auto-Login check for saved key
