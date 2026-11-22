@@ -48,6 +48,12 @@ local dandysWorld = {
     keyless = false
 }
 
+local doNotStop = {
+    name = "Do Not Stop",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/0d8a87ec7cdf36a79f91e48fe74df69f591194a78a10b79ac8762d7d5c2e6bf2/download",
+    keyless = false
+}
+
 local fisch = {
     name = "Fisch",
     url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download",
@@ -110,6 +116,10 @@ local Games = {
     [16116270224]     = dandysWorld, -- Main Place
     [5569032992]      = dandysWorld, -- GameId / UniverseId
 
+    -- Do Not Stop
+    [116779912472448] = doNotStop, -- Active PlaceId
+    [10772946647]     = doNotStop, -- GameId / UniverseId
+
     -- Fisch
     [121864768012064] = fisch, -- Active Fisch Place
     [6701277882]      = fisch, -- Active Fisch GameId / UniverseId
@@ -154,6 +164,8 @@ if not matchedGame then
         matchedGame = robloxStockExchange2
     elseif currentGameId == 5569032992 or currentPlaceId == 16116270224 then
         matchedGame = dandysWorld
+    elseif currentGameId == 10772946647 or currentPlaceId == 116779912472448 then
+        matchedGame = doNotStop
     elseif currentGameId == 6701277882 or currentPlaceId == 121864768012064 or currentGameId == 5750914919 or currentPlaceId == 16732694052 then
         matchedGame = fisch
     elseif currentGameId == 10769259605 or currentPlaceId == 104488514364885 then
