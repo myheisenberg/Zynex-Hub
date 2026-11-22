@@ -16,7 +16,6 @@ end
 
 -- Services
 local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -32,6 +31,11 @@ local PROVIDER = "work.ink"
 
 -- Supported Games Table
 local Games = {
+    [98894876188248] = {
+        name = "Cheat During Test",
+        url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
+        token = "4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478"
+    },
     [108920407787474] = {
         name = "Cheat During Test",
         url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
@@ -48,8 +52,8 @@ local Games = {
 local currentPlaceId = game.PlaceId
 local currentGameId = game.GameId
 local matchedGame = Games[currentPlaceId] or Games[currentGameId]
-if not matchedGame and (currentGameId == 5642875323 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224) then
-    matchedGame = Games[108920407787474]
+if not matchedGame and (currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224) then
+    matchedGame = Games[98894876188248]
 end
 
 -- Clipboard Helper
@@ -82,7 +86,7 @@ local function GetJunkie()
 end
 
 -- Key Validation Helper
-local function ValidateKey(key)
+local function CheckWhitelist(key)
     if not key or key == "" then
         return false, "Key cannot be empty"
     end
@@ -111,12 +115,11 @@ local function ValidateKey(key)
             end
         end
     end
-    -- Fallback if public SDK verification endpoint is unreachable
     return true, "Validated"
 end
 
--- Script Launch Execution
-local function LaunchGameScript(key)
+-- Launch Script Directly
+local function LaunchMainScript(key)
     getgenv().SCRIPT_KEY = key
     if writefile then
         pcall(writefile, KEY_FILE, key)
@@ -126,522 +129,546 @@ local function LaunchGameScript(key)
     end
 end
 
--- Check Saved Key First
-local savedKey = nil
+-- Auto-Login check for saved key
 if isfile and readfile and isfile(KEY_FILE) then
+    local saved = nil
     pcall(function()
         local k = readfile(KEY_FILE)
         if k then
             k = k:match("^%s*(.-)%s*$")
             if k and #k > 3 then
-                savedKey = k
+                saved = k
             end
         end
     end)
-end
-
-if savedKey and matchedGame then
-    local isValid = ValidateKey(savedKey)
-    if isValid then
-        LaunchGameScript(savedKey)
-        return
+    if saved and matchedGame then
+        local valid = CheckWhitelist(saved)
+        if valid then
+            LaunchMainScript(saved)
+            return
+        end
     end
 end
 
 -- ============================================================
---  AESTHETIC ZYNEX HUB KEY SYSTEM GUI
+--  1:1 DO NOT STOP AESTHETIC FLUENT ACRYLIC KEY GUI
 -- ============================================================
 
-local ParentGui = (gethui and gethui()) or CoreGui or LocalPlayer:WaitForChild("PlayerGui")
-if ParentGui:FindFirstChild("ZynexKeyGUI") then
-    ParentGui.ZynexKeyGUI:Destroy()
-end
-if Lighting:FindFirstChild("ZynexLoaderBlur") then
-    Lighting.ZynexLoaderBlur:Destroy()
+local parent = (gethui and gethui()) or CoreGui:FindFirstChild("RobloxGui") or CoreGui
+
+if parent:FindFirstChild("Zynex_AuthModal") then
+    parent.Zynex_AuthModal:Destroy()
 end
 
--- Colors Palette (Glassmorphic Dark)
-local C_BG_MAIN      = Color3.fromRGB(15, 17, 23)
-local C_BG_SURFACE   = Color3.fromRGB(20, 23, 31)
-local C_BORDER       = Color3.fromRGB(36, 41, 54)
-local C_TEXT_PRIMARY = Color3.fromRGB(244, 246, 250)
-local C_TEXT_MUTED   = Color3.fromRGB(110, 119, 138)
-local C_EMERALD      = Color3.fromRGB(45, 212, 168)
-local C_EMERALD_BG   = Color3.fromRGB(16, 40, 37)
-local C_EMERALD_LINE = Color3.fromRGB(27, 82, 72)
-local C_CORAL        = Color3.fromRGB(244, 102, 102)
-local C_CORAL_BG     = Color3.fromRGB(40, 19, 25)
-local C_CORAL_LINE   = Color3.fromRGB(88, 35, 45)
-local C_INDIGO       = Color3.fromRGB(99, 102, 241)
-local C_INDIGO_HOVER = Color3.fromRGB(129, 140, 248)
-
--- Modern Font Helper
-local function SetModernFont(label, weight, fallback)
-    label.Font = fallback or Enum.Font.GothamMedium
-    pcall(function()
-        label.FontFace = Font.new(
-            "rbxasset://fonts/families/BuilderSans.json",
-            weight or Enum.FontWeight.Medium,
-            Enum.FontStyle.Normal
-        )
-    end)
-end
-
--- Ambient Lighting Blur
-local Blur = Instance.new("BlurEffect")
-Blur.Name = "ZynexLoaderBlur"
-Blur.Size = 0
-Blur.Parent = Lighting
-
--- ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "ZynexKeyGUI"
-ScreenGui.IgnoreGuiInset = true
+ScreenGui.Name = "Zynex_AuthModal"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = ParentGui
+ScreenGui.Parent = parent
 
--- Main Container Window
-local Main = Instance.new("CanvasGroup")
-Main.Name = "Main"
-Main.AnchorPoint = Vector2.new(0.5, 0.5)
-Main.Position = UDim2.new(0.5, 0, 0.5, 15)
-Main.Size = UDim2.new(0, 440, 0, 320)
-Main.BackgroundColor3 = C_BG_MAIN
-Main.BackgroundTransparency = 0.02
-Main.GroupTransparency = 1
-Main.BorderSizePixel = 0
-Main.Parent = ScreenGui
+-- Background Overlay
+local Overlay = Instance.new("TextButton")
+Overlay.Name = "Overlay"
+Overlay.Text = ""
+Overlay.AutoButtonColor = false
+Overlay.Size = UDim2.fromScale(1, 1)
+Overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Overlay.BackgroundTransparency = 0.55
+Overlay.BorderSizePixel = 0
+Overlay.Parent = ScreenGui
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 16)
-MainCorner.Parent = Main
+-- Main Card (480 x 255)
+local Card = Instance.new("Frame")
+Card.Name = "Card"
+Card.Size = UDim2.fromOffset(480, 255)
+Card.AnchorPoint = Vector2.new(0.5, 0.5)
+Card.Position = UDim2.fromScale(0.5, 0.5)
+Card.BackgroundTransparency = 1
+Card.BorderSizePixel = 0
+Card.Parent = ScreenGui
 
-local MainScale = Instance.new("UIScale")
-MainScale.Scale = 0.95
-MainScale.Parent = Main
+-- Soft Shadow
+local Shadow = Instance.new("ImageLabel")
+Shadow.Name = "Shadow"
+Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+Shadow.Position = UDim2.fromScale(0.5, 0.5)
+Shadow.Size = UDim2.new(1, 110, 1, 110)
+Shadow.BackgroundTransparency = 1
+Shadow.Image = "rbxassetid://8992230677"
+Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+Shadow.ImageTransparency = 0.5
+Shadow.ScaleType = Enum.ScaleType.Slice
+Shadow.SliceCenter = Rect.new(99, 99, 99, 99)
+Shadow.ZIndex = 1
+Shadow.Parent = Card
 
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Thickness = 1
-MainStroke.Color = C_BORDER
-MainStroke.Parent = Main
+-- Background
+local Background = Instance.new("Frame")
+Background.Name = "Background"
+Background.Size = UDim2.fromScale(1, 1)
+Background.BackgroundColor3 = Color3.fromRGB(36, 36, 42)
+Background.BackgroundTransparency = 0.22
+Background.BorderSizePixel = 0
+Background.ZIndex = 2
+Background.Parent = Card
 
--- Top Radial Glow
-local TopGlow = Instance.new("Frame")
-TopGlow.Size = UDim2.new(1, 0, 0, 90)
-TopGlow.BackgroundColor3 = Color3.fromRGB(67, 56, 202)
-TopGlow.BackgroundTransparency = 0.88
-TopGlow.BorderSizePixel = 0
-TopGlow.ZIndex = 0
-TopGlow.Parent = Main
+local BgCorner = Instance.new("UICorner")
+BgCorner.CornerRadius = UDim.new(0, 8)
+BgCorner.Parent = Background
 
-local TopGlowGrad = Instance.new("UIGradient")
-TopGlowGrad.Rotation = 90
-TopGlowGrad.Transparency = NumberSequence.new({
-    NumberSequenceKeypoint.new(0, 0),
-    NumberSequenceKeypoint.new(1, 1)
-})
-TopGlowGrad.Parent = TopGlow
+-- Gradient Frame
+local GradientFrame = Instance.new("Frame")
+GradientFrame.Name = "Gradient"
+GradientFrame.Size = UDim2.fromScale(1, 1)
+GradientFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+GradientFrame.BackgroundTransparency = 0.75
+GradientFrame.BorderSizePixel = 0
+GradientFrame.ZIndex = 2
+GradientFrame.Parent = Card
 
--- Header: Glowing Emblem
-local Emblem = Instance.new("Frame")
-Emblem.Size = UDim2.new(0, 28, 0, 28)
-Emblem.Position = UDim2.new(0, 20, 0, 18)
-Emblem.BackgroundColor3 = Color3.fromRGB(79, 70, 229)
-Emblem.BorderSizePixel = 0
-Emblem.Parent = Main
+local GradCorner = Instance.new("UICorner")
+GradCorner.CornerRadius = UDim.new(0, 8)
+GradCorner.Parent = GradientFrame
 
-local EmblemCorner = Instance.new("UICorner")
-EmblemCorner.CornerRadius = UDim.new(0, 8)
-EmblemCorner.Parent = Emblem
+local Grad = Instance.new("UIGradient")
+Grad.Rotation = 90
+Grad.Color = ColorSequence.new(Color3.fromRGB(48, 48, 54), Color3.fromRGB(24, 24, 28))
+Grad.Parent = GradientFrame
 
-local EmblemGrad = Instance.new("UIGradient")
-EmblemGrad.Rotation = 45
-EmblemGrad.Color = ColorSequence.new(Color3.fromRGB(99, 102, 241), Color3.fromRGB(6, 182, 212))
-EmblemGrad.Parent = Emblem
+-- Acrylic Noise Texture
+local Noise = Instance.new("ImageLabel")
+Noise.Name = "Noise"
+Noise.Size = UDim2.fromScale(1, 1)
+Noise.BackgroundTransparency = 1
+Noise.Image = "rbxassetid://9968344227"
+Noise.ImageTransparency = 0.94
+Noise.ScaleType = Enum.ScaleType.Tile
+Noise.TileSize = UDim2.new(0, 128, 0, 128)
+Noise.ZIndex = 2
+Noise.Parent = Card
 
-local EmblemText = Instance.new("TextLabel")
-EmblemText.Size = UDim2.new(1, 0, 1, 0)
-EmblemText.BackgroundTransparency = 1
-EmblemText.Text = "Z"
-EmblemText.TextColor3 = Color3.fromRGB(255, 255, 255)
-EmblemText.TextSize = 16
-EmblemText.Parent = Emblem
-SetModernFont(EmblemText, Enum.FontWeight.Bold, Enum.Font.GothamBold)
+local NoiseCorner = Instance.new("UICorner")
+NoiseCorner.CornerRadius = UDim.new(0, 8)
+NoiseCorner.Parent = Noise
 
--- Header Titles
+-- Border Frame
+local BorderFrame = Instance.new("Frame")
+BorderFrame.Name = "Border"
+BorderFrame.Size = UDim2.fromScale(1, 1)
+BorderFrame.BackgroundTransparency = 1
+BorderFrame.ZIndex = 4
+BorderFrame.Parent = Card
+
+local BorderCorner = Instance.new("UICorner")
+BorderCorner.CornerRadius = UDim.new(0, 8)
+BorderCorner.Parent = BorderFrame
+
+local BorderStroke = Instance.new("UIStroke")
+BorderStroke.Color = Color3.fromRGB(90, 90, 95)
+BorderStroke.Transparency = 0.5
+BorderStroke.Thickness = 1
+BorderStroke.Parent = BorderFrame
+
+-- Top Glowing Neon Cyan Line
+local TopLine = Instance.new("Frame")
+TopLine.Name = "TopLine"
+TopLine.Size = UDim2.new(1, -16, 0, 1)
+TopLine.Position = UDim2.fromOffset(8, 0)
+TopLine.BackgroundColor3 = Color3.fromRGB(96, 205, 255)
+TopLine.BackgroundTransparency = 0.4
+TopLine.BorderSizePixel = 0
+TopLine.ZIndex = 5
+TopLine.Parent = Card
+
+-- Header
+local Header = Instance.new("Frame")
+Header.Name = "Header"
+Header.Size = UDim2.new(1, 0, 0, 52)
+Header.BackgroundTransparency = 1
+Header.ZIndex = 5
+Header.Parent = Card
+
+-- Lucide Key Icon
+local Icon = Instance.new("ImageLabel")
+Icon.Name = "Icon"
+Icon.Size = UDim2.fromOffset(22, 22)
+Icon.Position = UDim2.fromOffset(20, 16)
+Icon.BackgroundTransparency = 1
+Icon.Image = "rbxassetid://118976126805967"
+Icon.ImageRectOffset = Vector2.new(320, 64)
+Icon.ImageRectSize = Vector2.new(64, 64)
+Icon.ImageColor3 = Color3.fromRGB(96, 205, 255)
+Icon.ZIndex = 5
+Icon.Parent = Header
+
+-- Title
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 180, 0, 18)
-Title.Position = UDim2.new(0, 56, 0, 16)
-Title.BackgroundTransparency = 1
+Title.Name = "Title"
 Title.Text = "Zynex Hub"
-Title.TextColor3 = C_TEXT_PRIMARY
-Title.TextSize = 17
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 16
+Title.TextColor3 = Color3.fromRGB(245, 245, 245)
 Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Parent = Main
-SetModernFont(Title, Enum.FontWeight.Bold, Enum.Font.GothamBold)
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.fromOffset(50, 12)
+Title.Size = UDim2.new(1, -90, 0, 18)
+Title.AutoLocalize = false
+Title.ZIndex = 5
+Title.Parent = Header
 
-local Subtitle = Instance.new("TextLabel")
-Subtitle.Size = UDim2.new(0, 180, 0, 14)
-Subtitle.Position = UDim2.new(0, 56, 0, 34)
-Subtitle.BackgroundTransparency = 1
-Subtitle.Text = "Universal Script Hub"
-Subtitle.TextColor3 = C_TEXT_MUTED
-Subtitle.TextSize = 11
-Subtitle.TextXAlignment = Enum.TextXAlignment.Left
-Subtitle.Parent = Main
-SetModernFont(Subtitle, Enum.FontWeight.Medium, Enum.Font.Gotham)
+-- SubTitle (Shows Active Game Name)
+local SubTitle = Instance.new("TextLabel")
+SubTitle.Name = "SubTitle"
+SubTitle.Text = (matchedGame and matchedGame.name or "Universal Script Hub") .. " | by zynex"
+SubTitle.Font = Enum.Font.Gotham
+SubTitle.TextSize = 12
+SubTitle.TextColor3 = matchedGame and Color3.fromRGB(96, 205, 255) or Color3.fromRGB(255, 100, 100)
+SubTitle.TextXAlignment = Enum.TextXAlignment.Left
+SubTitle.BackgroundTransparency = 1
+SubTitle.Position = UDim2.fromOffset(50, 31)
+SubTitle.Size = UDim2.new(1, -90, 0, 14)
+SubTitle.AutoLocalize = false
+SubTitle.ZIndex = 5
+SubTitle.Parent = Header
 
--- Close Button (Top Right)
+-- Close Button
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 26, 0, 26)
-CloseBtn.Position = UDim2.new(1, -34, 0, 16)
-CloseBtn.BackgroundTransparency = 1
+CloseBtn.Name = "CloseBtn"
 CloseBtn.Text = "✕"
-CloseBtn.TextColor3 = C_TEXT_MUTED
-CloseBtn.TextSize = 14
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 13
+CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 155)
+CloseBtn.BackgroundTransparency = 1
+CloseBtn.Size = UDim2.fromOffset(24, 24)
+CloseBtn.Position = UDim2.new(1, -34, 0, 14)
+CloseBtn.ZIndex = 6
 CloseBtn.AutoButtonColor = false
-CloseBtn.Parent = Main
-SetModernFont(CloseBtn, Enum.FontWeight.Bold, Enum.Font.GothamBold)
+CloseBtn.Parent = Card
 
--- Status Pill (Top Right, next to Close button)
-local StatusPill = Instance.new("Frame")
-StatusPill.AnchorPoint = Vector2.new(1, 0)
-StatusPill.Position = UDim2.new(1, -44, 0, 18)
-StatusPill.Size = UDim2.new(0, 105, 0, 22)
-StatusPill.BackgroundColor3 = matchedGame and C_EMERALD_BG or C_CORAL_BG
-StatusPill.BorderSizePixel = 0
-StatusPill.Parent = Main
-
-local PillCorner = Instance.new("UICorner")
-PillCorner.CornerRadius = UDim.new(1, 0)
-PillCorner.Parent = StatusPill
-
-local PillStroke = Instance.new("UIStroke")
-PillStroke.Thickness = 1
-PillStroke.Color = matchedGame and C_EMERALD_LINE or C_CORAL_LINE
-PillStroke.Parent = StatusPill
-
-local PillDot = Instance.new("Frame")
-PillDot.Size = UDim2.new(0, 6, 0, 6)
-PillDot.Position = UDim2.new(0, 10, 0.5, -3)
-PillDot.BackgroundColor3 = matchedGame and C_EMERALD or C_CORAL
-PillDot.BorderSizePixel = 0
-PillDot.Parent = StatusPill
-
-local PillDotCorner = Instance.new("UICorner")
-PillDotCorner.CornerRadius = UDim.new(1, 0)
-PillDotCorner.Parent = PillDot
-
-local PillText = Instance.new("TextLabel")
-PillText.Size = UDim2.new(1, -22, 1, 0)
-PillText.Position = UDim2.new(0, 20, 0, 0)
-PillText.BackgroundTransparency = 1
-PillText.Text = matchedGame and "Ready" or "Unsupported"
-PillText.TextColor3 = matchedGame and C_EMERALD or C_CORAL
-PillText.TextSize = 10
-PillText.TextTruncate = Enum.TextTruncate.AtEnd
-PillText.TextXAlignment = Enum.TextXAlignment.Left
-PillText.Parent = StatusPill
-SetModernFont(PillText, Enum.FontWeight.SemiBold, Enum.Font.GothamMedium)
-
--- Detected Game Card
-local GameCard = Instance.new("Frame")
-GameCard.Size = UDim2.new(1, -40, 0, 52)
-GameCard.Position = UDim2.new(0, 20, 0, 62)
-GameCard.BackgroundColor3 = C_BG_SURFACE
-GameCard.BorderSizePixel = 0
-GameCard.Parent = Main
-
-local GameCardCorner = Instance.new("UICorner")
-GameCardCorner.CornerRadius = UDim.new(0, 10)
-GameCardCorner.Parent = GameCard
-
-local GameCardStroke = Instance.new("UIStroke")
-GameCardStroke.Thickness = 1
-GameCardStroke.Color = C_BORDER
-GameCardStroke.Parent = GameCard
-
-local GameCardEyebrow = Instance.new("TextLabel")
-GameCardEyebrow.Size = UDim2.new(1, -80, 0, 12)
-GameCardEyebrow.Position = UDim2.new(0, 14, 0, 9)
-GameCardEyebrow.BackgroundTransparency = 1
-GameCardEyebrow.Text = "ACTIVE GAME"
-GameCardEyebrow.TextColor3 = C_TEXT_MUTED
-GameCardEyebrow.TextSize = 9
-GameCardEyebrow.TextXAlignment = Enum.TextXAlignment.Left
-GameCardEyebrow.Parent = GameCard
-SetModernFont(GameCardEyebrow, Enum.FontWeight.Bold, Enum.Font.GothamBold)
-
-local GameCardName = Instance.new("TextLabel")
-GameCardName.Size = UDim2.new(1, -90, 0, 18)
-GameCardName.Position = UDim2.new(0, 14, 0, 23)
-GameCardName.BackgroundTransparency = 1
-GameCardName.Text = matchedGame and matchedGame.name or ("Game ID: " .. tostring(currentPlaceId))
-GameCardName.TextColor3 = matchedGame and C_TEXT_PRIMARY or C_CORAL
-GameCardName.TextSize = 14
-GameCardName.TextTruncate = Enum.TextTruncate.AtEnd
-GameCardName.TextXAlignment = Enum.TextXAlignment.Left
-GameCardName.Parent = GameCard
-SetModernFont(GameCardName, Enum.FontWeight.Bold, Enum.Font.GothamBold)
-
-local ModeBadge = Instance.new("TextLabel")
-ModeBadge.AnchorPoint = Vector2.new(1, 0.5)
-ModeBadge.Position = UDim2.new(1, -12, 0.5, 0)
-ModeBadge.Size = UDim2.new(0, 72, 0, 22)
-ModeBadge.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
-ModeBadge.Text = "KEY LOCK"
-ModeBadge.TextColor3 = Color3.fromRGB(147, 197, 253)
-ModeBadge.TextSize = 10
-ModeBadge.Parent = GameCard
-SetModernFont(ModeBadge, Enum.FontWeight.SemiBold, Enum.Font.GothamBold)
-
-local ModeBadgeCorner = Instance.new("UICorner")
-ModeBadgeCorner.CornerRadius = UDim.new(0, 6)
-ModeBadgeCorner.Parent = ModeBadge
-
--- Key Input Section
-local KeySection = Instance.new("Frame")
-KeySection.Size = UDim2.new(1, -40, 0, 44)
-KeySection.Position = UDim2.new(0, 20, 0, 126)
-KeySection.BackgroundColor3 = C_BG_SURFACE
-KeySection.BorderSizePixel = 0
-KeySection.Parent = Main
-
-local KeyCorner = Instance.new("UICorner")
-KeyCorner.CornerRadius = UDim.new(0, 10)
-KeyCorner.Parent = KeySection
-
-local KeyStroke = Instance.new("UIStroke")
-KeyStroke.Thickness = 1
-KeyStroke.Color = C_BORDER
-KeyStroke.Parent = KeySection
-
-local KeyInput = Instance.new("TextBox")
-KeyInput.Size = UDim2.new(1, -24, 1, 0)
-KeyInput.Position = UDim2.new(0, 12, 0, 0)
-KeyInput.BackgroundTransparency = 1
-KeyInput.Text = ""
-KeyInput.PlaceholderText = "Paste your Zynex key here..."
-KeyInput.PlaceholderColor3 = C_TEXT_MUTED
-KeyInput.TextColor3 = C_TEXT_PRIMARY
-KeyInput.TextSize = 13
-KeyInput.ClearTextOnFocus = false
-KeyInput.TextXAlignment = Enum.TextXAlignment.Left
-KeyInput.Parent = KeySection
-SetModernFont(KeyInput, Enum.FontWeight.Regular, Enum.Font.Gotham)
-
-KeyInput.Focused:Connect(function()
-    TweenService:Create(KeyStroke, TweenInfo.new(0.2), { Color = C_INDIGO }):Play()
+CloseBtn.MouseEnter:Connect(function()
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+end)
+CloseBtn.MouseLeave:Connect(function()
+    CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 155)
+end)
+CloseBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
 end)
 
-KeyInput.FocusLost:Connect(function()
-    TweenService:Create(KeyStroke, TweenInfo.new(0.2), { Color = C_BORDER }):Play()
+-- Body Area
+local Body = Instance.new("Frame")
+Body.Name = "Body"
+Body.Size = UDim2.new(1, -40, 0, 115)
+Body.Position = UDim2.fromOffset(20, 58)
+Body.BackgroundTransparency = 1
+Body.ZIndex = 5
+Body.Parent = Card
+
+-- Input Frame
+local InputFrame = Instance.new("Frame")
+InputFrame.Name = "InputFrame"
+InputFrame.Size = UDim2.new(1, 0, 0, 38)
+InputFrame.Position = UDim2.fromOffset(0, 6)
+InputFrame.BackgroundColor3 = Color3.fromRGB(48, 48, 54)
+InputFrame.BackgroundTransparency = 0.2
+InputFrame.BorderSizePixel = 0
+InputFrame.ZIndex = 5
+InputFrame.Parent = Body
+
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(0, 4)
+InputCorner.Parent = InputFrame
+
+local InputStroke = Instance.new("UIStroke")
+InputStroke.Color = Color3.fromRGB(75, 75, 82)
+InputStroke.Transparency = 0.6
+InputStroke.Thickness = 1
+InputStroke.Parent = InputFrame
+
+local TextBox = Instance.new("TextBox")
+TextBox.Name = "Input"
+TextBox.PlaceholderText = "Paste key here..."
+TextBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 155)
+TextBox.Text = ""
+TextBox.Font = Enum.Font.Gotham
+TextBox.TextSize = 13
+TextBox.TextColor3 = Color3.fromRGB(245, 245, 245)
+TextBox.TextXAlignment = Enum.TextXAlignment.Left
+TextBox.ClearTextOnFocus = false
+TextBox.BackgroundTransparency = 1
+TextBox.Size = UDim2.new(1, -24, 1, 0)
+TextBox.Position = UDim2.fromOffset(12, 0)
+TextBox.AutoLocalize = false
+TextBox.ZIndex = 6
+TextBox.Parent = InputFrame
+
+-- Animated Indicator Line
+local Indicator = Instance.new("Frame")
+Indicator.Name = "Indicator"
+Indicator.Size = UDim2.new(1, -4, 0, 1)
+Indicator.Position = UDim2.new(0, 2, 1, -1)
+Indicator.BackgroundColor3 = Color3.fromRGB(145, 145, 150)
+Indicator.BackgroundTransparency = 0.5
+Indicator.BorderSizePixel = 0
+Indicator.ZIndex = 6
+Indicator.Parent = InputFrame
+
+TextBox.Focused:Connect(function()
+    TweenService:Create(InputFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(38, 38, 44), BackgroundTransparency = 0.1}):Play()
+    TweenService:Create(Indicator, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(96, 205, 255), BackgroundTransparency = 0, Size = UDim2.new(1, -2, 0, 2)}):Play()
 end)
 
--- Status / Helper Message Label
+TextBox.FocusLost:Connect(function()
+    TweenService:Create(InputFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(48, 48, 54), BackgroundTransparency = 0.2}):Play()
+    TweenService:Create(Indicator, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(145, 145, 150), BackgroundTransparency = 0.5, Size = UDim2.new(1, -4, 0, 1)}):Play()
+end)
+
+-- Status Label
 local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Size = UDim2.new(1, -40, 0, 18)
-StatusLabel.Position = UDim2.new(0, 20, 0, 178)
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Text = "Click \"Get Key\" to generate your 24-hour verification key."
-StatusLabel.TextColor3 = C_TEXT_MUTED
-StatusLabel.TextSize = 11
+StatusLabel.Name = "Status"
+StatusLabel.Text = matchedGame and "Click \"Get Key\" to copy the verification link." or ("Game not supported yet (PlaceId: " .. tostring(currentPlaceId) .. ")")
+StatusLabel.Font = Enum.Font.Gotham
+StatusLabel.TextSize = 12
+StatusLabel.TextColor3 = matchedGame and Color3.fromRGB(155, 155, 160) or Color3.fromRGB(255, 100, 100)
 StatusLabel.TextXAlignment = Enum.TextXAlignment.Left
-StatusLabel.Parent = Main
-SetModernFont(StatusLabel, Enum.FontWeight.Medium, Enum.Font.GothamMedium)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Position = UDim2.fromOffset(2, 50)
+StatusLabel.Size = UDim2.new(1, -4, 0, 20)
+StatusLabel.AutoLocalize = false
+StatusLabel.ZIndex = 5
+StatusLabel.Parent = Body
 
--- Action Buttons Container
-local ButtonContainer = Instance.new("Frame")
-ButtonContainer.Size = UDim2.new(1, -40, 0, 38)
-ButtonContainer.Position = UDim2.new(0, 20, 1, -56)
-ButtonContainer.BackgroundTransparency = 1
-ButtonContainer.Parent = Main
+-- Bottom Bar
+local BottomBar = Instance.new("Frame")
+BottomBar.Name = "BottomBar"
+BottomBar.Size = UDim2.new(1, 0, 0, 58)
+BottomBar.Position = UDim2.new(0, 0, 1, -58)
+BottomBar.BackgroundColor3 = Color3.fromRGB(30, 30, 34)
+BottomBar.BackgroundTransparency = 0.2
+BottomBar.BorderSizePixel = 0
+BottomBar.ZIndex = 5
+BottomBar.Parent = Card
 
-local BtnList = Instance.new("UIListLayout")
-BtnList.FillDirection = Enum.FillDirection.Horizontal
-BtnList.HorizontalAlignment = Enum.HorizontalAlignment.Right
-BtnList.VerticalAlignment = Enum.VerticalAlignment.Center
-BtnList.Padding = UDim.new(0, 8)
-BtnList.Parent = ButtonContainer
+local BottomCorner = Instance.new("UICorner")
+BottomCorner.CornerRadius = UDim.new(0, 8)
+BottomCorner.Parent = BottomBar
 
--- Discord Button
+local BottomCover = Instance.new("Frame")
+BottomCover.Name = "Cover"
+BottomCover.Size = UDim2.new(1, 0, 0, 8)
+BottomCover.Position = UDim2.new(0, 0, 0, 0)
+BottomCover.BackgroundColor3 = Color3.fromRGB(30, 30, 34)
+BottomCover.BackgroundTransparency = 0.2
+BottomCover.BorderSizePixel = 0
+BottomCover.ZIndex = 5
+BottomCover.Parent = BottomBar
+
+local BottomLine = Instance.new("Frame")
+BottomLine.Name = "Sep"
+BottomLine.Size = UDim2.new(1, 0, 0, 1)
+BottomLine.Position = UDim2.new(0, 0, 0, 0)
+BottomLine.BackgroundColor3 = Color3.fromRGB(60, 60, 66)
+BottomLine.BackgroundTransparency = 0.4
+BottomLine.BorderSizePixel = 0
+BottomLine.ZIndex = 6
+BottomLine.Parent = BottomBar
+
+-- Discord Button (Left)
 local DiscordBtn = Instance.new("TextButton")
-DiscordBtn.Size = UDim2.new(0, 95, 1, 0)
-DiscordBtn.BackgroundColor3 = Color3.fromRGB(30, 34, 46)
-DiscordBtn.BorderSizePixel = 0
+DiscordBtn.Name = "DiscordBtn"
 DiscordBtn.Text = "Discord"
-DiscordBtn.TextColor3 = Color3.fromRGB(165, 180, 252)
-DiscordBtn.TextSize = 12
+DiscordBtn.Font = Enum.Font.GothamBold
+DiscordBtn.TextSize = 14
+DiscordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordBtn.Size = UDim2.fromOffset(88, 34)
+DiscordBtn.Position = UDim2.fromOffset(20, 12)
+DiscordBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+DiscordBtn.BackgroundTransparency = 0.1
 DiscordBtn.AutoButtonColor = false
-DiscordBtn.Parent = ButtonContainer
-SetModernFont(DiscordBtn, Enum.FontWeight.SemiBold, Enum.Font.GothamBold)
+DiscordBtn.AutoLocalize = false
+DiscordBtn.ZIndex = 7
+DiscordBtn.Parent = BottomBar
 
 local DiscordCorner = Instance.new("UICorner")
-DiscordCorner.CornerRadius = UDim.new(0, 8)
+DiscordCorner.CornerRadius = UDim.new(0, 4)
 DiscordCorner.Parent = DiscordBtn
 
 local DiscordStroke = Instance.new("UIStroke")
+DiscordStroke.Color = Color3.fromRGB(114, 137, 218)
+DiscordStroke.Transparency = 0.4
 DiscordStroke.Thickness = 1
-DiscordStroke.Color = Color3.fromRGB(45, 52, 70)
 DiscordStroke.Parent = DiscordBtn
 
 DiscordBtn.MouseEnter:Connect(function()
-    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(40, 46, 62) }):Play()
+    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(105, 118, 245), BackgroundTransparency = 0}):Play()
 end)
 DiscordBtn.MouseLeave:Connect(function()
-    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(30, 34, 46) }):Play()
+    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(88, 101, 242), BackgroundTransparency = 0.1}):Play()
 end)
 
 DiscordBtn.MouseButton1Click:Connect(function()
     CopyToClipboard(DISCORD_URL)
     StatusLabel.Text = "Discord invite copied to clipboard!"
-    StatusLabel.TextColor3 = Color3.fromRGB(129, 140, 248)
+    StatusLabel.TextColor3 = Color3.fromRGB(114, 137, 218)
 end)
+
+-- Right Holder for Get Key + Verify Key
+local RightHolder = Instance.new("Frame")
+RightHolder.Name = "RightHolder"
+RightHolder.Size = UDim2.new(0, 260, 0, 34)
+RightHolder.Position = UDim2.new(1, -280, 0, 12)
+RightHolder.BackgroundTransparency = 1
+RightHolder.ZIndex = 6
+RightHolder.Parent = BottomBar
+
+local RightLayout = Instance.new("UIListLayout")
+RightLayout.FillDirection = Enum.FillDirection.Horizontal
+RightLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+RightLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+RightLayout.Padding = UDim.new(0, 10)
+RightLayout.Parent = RightHolder
 
 -- Get Key Button
 local GetKeyBtn = Instance.new("TextButton")
-GetKeyBtn.Size = UDim2.new(0, 105, 1, 0)
-GetKeyBtn.BackgroundColor3 = Color3.fromRGB(67, 56, 202)
-GetKeyBtn.BorderSizePixel = 0
+GetKeyBtn.Name = "GetKeyBtn"
 GetKeyBtn.Text = "Get Key"
-GetKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-GetKeyBtn.TextSize = 12
+GetKeyBtn.Font = Enum.Font.GothamMedium
+GetKeyBtn.TextSize = 13
+GetKeyBtn.TextColor3 = Color3.fromRGB(235, 235, 240)
+GetKeyBtn.Size = UDim2.fromOffset(125, 34)
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(48, 48, 54)
+GetKeyBtn.BackgroundTransparency = 0.1
 GetKeyBtn.AutoButtonColor = false
-GetKeyBtn.Parent = ButtonContainer
-SetModernFont(GetKeyBtn, Enum.FontWeight.SemiBold, Enum.Font.GothamBold)
+GetKeyBtn.AutoLocalize = false
+GetKeyBtn.ZIndex = 7
+GetKeyBtn.Parent = RightHolder
 
 local GetKeyCorner = Instance.new("UICorner")
-GetKeyCorner.CornerRadius = UDim.new(0, 8)
+GetKeyCorner.CornerRadius = UDim.new(0, 4)
 GetKeyCorner.Parent = GetKeyBtn
 
+local GetKeyStroke = Instance.new("UIStroke")
+GetKeyStroke.Color = Color3.fromRGB(75, 75, 82)
+GetKeyStroke.Transparency = 0.6
+GetKeyStroke.Thickness = 1
+GetKeyStroke.Parent = GetKeyBtn
+
 GetKeyBtn.MouseEnter:Connect(function()
-    TweenService:Create(GetKeyBtn, TweenInfo.new(0.15), { BackgroundColor3 = C_INDIGO_HOVER }):Play()
+    TweenService:Create(GetKeyBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(62, 62, 70)}):Play()
 end)
 GetKeyBtn.MouseLeave:Connect(function()
-    TweenService:Create(GetKeyBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(67, 56, 202) }):Play()
+    TweenService:Create(GetKeyBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(48, 48, 54)}):Play()
 end)
 
 GetKeyBtn.MouseButton1Click:Connect(function()
     CopyToClipboard(FLOW_URL)
-    StatusLabel.Text = "Key link copied to clipboard! Paste it into your browser."
-    StatusLabel.TextColor3 = C_EMERALD
+    StatusLabel.Text = "Key link copied to clipboard! Complete checkpoint in browser."
+    StatusLabel.TextColor3 = Color3.fromRGB(96, 205, 255)
 end)
 
--- Submit Key Button
-local SubmitBtn = Instance.new("TextButton")
-SubmitBtn.Size = UDim2.new(0, 115, 1, 0)
-SubmitBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
-SubmitBtn.BorderSizePixel = 0
-SubmitBtn.Text = "Submit Key"
-SubmitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-SubmitBtn.TextSize = 12
-SubmitBtn.AutoButtonColor = false
-SubmitBtn.Parent = ButtonContainer
-SetModernFont(SubmitBtn, Enum.FontWeight.Bold, Enum.Font.GothamBold)
+-- Verify Key Button (Fluent Neon Blue)
+local VerifyBtn = Instance.new("TextButton")
+VerifyBtn.Name = "VerifyBtn"
+VerifyBtn.Text = "Verify Key"
+VerifyBtn.Font = Enum.Font.GothamBold
+VerifyBtn.TextSize = 14
+VerifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+VerifyBtn.Size = UDim2.fromOffset(115, 34)
+VerifyBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 212)
+VerifyBtn.BackgroundTransparency = 0
+VerifyBtn.AutoButtonColor = false
+VerifyBtn.AutoLocalize = false
+VerifyBtn.ZIndex = 7
+VerifyBtn.Parent = RightHolder
 
-local SubmitCorner = Instance.new("UICorner")
-SubmitCorner.CornerRadius = UDim.new(0, 8)
-SubmitCorner.Parent = SubmitBtn
+local VerifyCorner = Instance.new("UICorner")
+VerifyCorner.CornerRadius = UDim.new(0, 4)
+VerifyCorner.Parent = VerifyBtn
 
-SubmitBtn.MouseEnter:Connect(function()
-    TweenService:Create(SubmitBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(52, 211, 153) }):Play()
+local VerifyStroke = Instance.new("UIStroke")
+VerifyStroke.Color = Color3.fromRGB(96, 205, 255)
+VerifyStroke.Transparency = 0.6
+VerifyStroke.Thickness = 1
+VerifyStroke.Parent = VerifyBtn
+
+VerifyBtn.MouseEnter:Connect(function()
+    TweenService:Create(VerifyBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(16, 137, 230)}):Play()
 end)
-SubmitBtn.MouseLeave:Connect(function()
-    TweenService:Create(SubmitBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(16, 185, 129) }):Play()
-end)
-
--- Smooth Exit Animation
-local function SmoothExit(callback)
-    TweenService:Create(Blur, TweenInfo.new(0.35), { Size = 0 }):Play()
-    TweenService:Create(MainScale, TweenInfo.new(0.3), { Scale = 0.95 }):Play()
-    TweenService:Create(Main, TweenInfo.new(0.3), {
-        Position = UDim2.new(0.5, 0, 0.5, 10),
-        GroupTransparency = 1
-    }):Play()
-    task.delay(0.35, function()
-        ScreenGui:Destroy()
-        Blur:Destroy()
-        if callback then callback() end
-    end)
-end
-
-CloseBtn.MouseButton1Click:Connect(function()
-    SmoothExit()
+VerifyBtn.MouseLeave:Connect(function()
+    TweenService:Create(VerifyBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(0, 120, 212)}):Play()
 end)
 
--- Key Submission Logic
-local isChecking = false
-SubmitBtn.MouseButton1Click:Connect(function()
-    if isChecking then return end
-    local candidate = KeyInput.Text:match("^%s*(.-)%s*$")
-    if not candidate or candidate == "" then
-        StatusLabel.Text = "Please paste a key into the input field first."
-        StatusLabel.TextColor3 = C_CORAL
+-- Key Verification & Submission Logic
+local verifying = false
+VerifyBtn.MouseButton1Click:Connect(function()
+    if verifying then return end
+    local entered = TextBox.Text
+    if not entered or entered == "" then
+        StatusLabel.Text = "Please paste your key into the text field first."
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
         return
     end
 
     if not matchedGame then
         StatusLabel.Text = "Cannot submit: this game is not supported."
-        StatusLabel.TextColor3 = C_CORAL
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
         return
     end
 
-    isChecking = true
-    SubmitBtn.Text = "Checking..."
-    StatusLabel.Text = "Verifying key with JNKIE servers..."
-    StatusLabel.TextColor3 = Color3.fromRGB(147, 197, 253)
+    verifying = true
+    VerifyBtn.Text = "Checking..."
+    StatusLabel.Text = "Validating key with JNKIE servers..."
+    StatusLabel.TextColor3 = Color3.fromRGB(180, 180, 185)
 
     task.spawn(function()
-        local valid, msg = ValidateKey(candidate)
+        local valid, msg = CheckWhitelist(entered)
         if valid then
-            StatusLabel.Text = "Key verified! Launching Zynex Hub..."
-            StatusLabel.TextColor3 = C_EMERALD
-            SubmitBtn.Text = "Verified!"
-            SubmitBtn.BackgroundColor3 = C_EMERALD
+            StatusLabel.Text = "Key verified successfully! Loading script..."
+            StatusLabel.TextColor3 = Color3.fromRGB(100, 255, 120)
+            VerifyBtn.Text = "Verified!"
+            VerifyBtn.BackgroundColor3 = Color3.fromRGB(16, 185, 129)
 
             task.wait(0.6)
-            SmoothExit(function()
-                LaunchGameScript(candidate)
-            end)
+            ScreenGui:Destroy()
+            LaunchMainScript(entered)
         else
-            StatusLabel.Text = msg or "Key invalid or expired. Please get a new key."
-            StatusLabel.TextColor3 = C_CORAL
-            SubmitBtn.Text = "Submit Key"
-            isChecking = false
+            StatusLabel.Text = msg or "Invalid or expired key. Please get a new key."
+            StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+            VerifyBtn.Text = "Verify Key"
+            verifying = false
         end
     end)
 end)
 
 -- Draggable Window Implementation
-local isDragging = false
+local dragging = false
 local dragStart = Vector3.new()
 local startPos = UDim2.new()
 local dragInput = nil
 
-Main.InputBegan:Connect(function(input)
+Card.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        isDragging = true
+        dragging = true
         dragStart = input.Position
-        startPos = Main.Position
+        startPos = Card.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                isDragging = false
+                dragging = false
             end
         end)
     end
 end)
 
-Main.InputChanged:Connect(function(input)
+Card.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and isDragging then
+    if input == dragInput and dragging then
         local delta = input.Position - dragStart
-        Main.Position = UDim2.new(
+        Card.Position = UDim2.new(
             startPos.X.Scale,
             startPos.X.Offset + delta.X,
             startPos.Y.Scale,
@@ -649,11 +676,3 @@ UserInputService.InputChanged:Connect(function(input)
         )
     end
 end)
-
--- Entrance Animation
-TweenService:Create(Blur, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Size = 10 }):Play()
-TweenService:Create(MainScale, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Scale = 1 }):Play()
-TweenService:Create(Main, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-    Position = UDim2.new(0.5, 0, 0.5, 0),
-    GroupTransparency = 0
-}):Play()
