@@ -30,22 +30,15 @@ local IDENTIFIER = "1239891"
 local PROVIDER = "work.ink"
 
 -- Supported Games Table
+local cheatDuringTest = {
+    name = "Cheat During Test",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download"
+}
+
 local Games = {
-    [98894876188248] = {
-        name = "Cheat During Test",
-        url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
-        token = "4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478"
-    },
-    [108920407787474] = {
-        name = "Cheat During Test",
-        url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
-        token = "4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478"
-    },
-    [16116270224] = {
-        name = "Cheat During Test",
-        url = "https://api.jnkie.com/api/v1/luascripts/public/4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478/download",
-        token = "4962ebaeab6acaf91c5b82e92a2b21d393a4baa301f9aa756d65fcaadcab7478"
-    }
+    [98894876188248] = cheatDuringTest, -- Lobby / Main Menu
+    [108920407787474] = cheatDuringTest, -- Classroom Exam
+    [16116270224]     = cheatDuringTest, -- Alternate Place
 }
 
 -- Game Detection
