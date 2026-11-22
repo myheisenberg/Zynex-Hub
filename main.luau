@@ -44,6 +44,11 @@ local dandysWorld = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/3d869ff1109db81e1738cf2fecf75c656bb9ca5d91a918cc683e1131759fe2fd/download"
 }
 
+local fisch = {
+    name = "Fisch",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -63,6 +68,10 @@ local Games = {
     -- Dandy's World
     [16116270224]     = dandysWorld, -- Main Place
     [5569032992]      = dandysWorld, -- GameId / UniverseId
+
+    -- Fisch
+    [16732694052]     = fisch, -- Main Place
+    [5750914919]      = fisch, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -78,6 +87,8 @@ if not matchedGame then
         matchedGame = robloxStockExchange2
     elseif currentGameId == 5569032992 or currentPlaceId == 16116270224 then
         matchedGame = dandysWorld
+    elseif currentGameId == 5750914919 or currentPlaceId == 16732694052 then
+        matchedGame = fisch
     end
 end
 
