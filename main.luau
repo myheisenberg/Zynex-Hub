@@ -60,6 +60,12 @@ local findTheCountry = {
     keyless = false
 }
 
+local sandworm = {
+    name = "Sandworm Playground",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/38655406e24a5bc29f44ce050c1e2f6b6f110f448725c7b39331a5fe26b9123f/download",
+    keyless = false
+}
+
 local fisch = {
     name = "Fisch",
     url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download",
@@ -130,6 +136,10 @@ local Games = {
     [100321734959591] = findTheCountry, -- Active PlaceId
     [10770370806]     = findTheCountry, -- GameId / UniverseId
 
+    -- Sandworm Playground
+    [88246556972100]  = sandworm, -- Active PlaceId
+    [10774386745]     = sandworm, -- GameId / UniverseId
+
     -- Fisch
     [121864768012064] = fisch, -- Active Fisch Place
     [6701277882]      = fisch, -- Active Fisch GameId / UniverseId
@@ -178,6 +188,8 @@ if not matchedGame then
         matchedGame = doNotStop
     elseif currentGameId == 10770370806 or currentPlaceId == 100321734959591 then
         matchedGame = findTheCountry
+    elseif currentGameId == 10774386745 or currentPlaceId == 88246556972100 then
+        matchedGame = sandworm
     elseif currentGameId == 6701277882 or currentPlaceId == 121864768012064 or currentGameId == 5750914919 or currentPlaceId == 16732694052 then
         matchedGame = fisch
     elseif currentGameId == 10769259605 or currentPlaceId == 104488514364885 then
