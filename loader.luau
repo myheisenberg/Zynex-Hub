@@ -8,12 +8,6 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
--- Teleport Persistence
-local qot = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-if type(qot) == "function" then
-    pcall(qot, 'loadstring(game:HttpGet("https://raw.githubusercontent.com/myheisenberg/Zynex-Hub/main/loader.luau"))()')
-end
-
 -- Services
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
