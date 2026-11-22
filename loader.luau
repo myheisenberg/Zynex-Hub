@@ -34,6 +34,11 @@ local sniperArena = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/64d06cf7501d53d848204c2f2ebb6968427817d0e3e2d6240cb8e0b01e3b4879/download"
 }
 
+local robloxStockExchange2 = {
+    name = "Roblox Stock Exchange 2",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/20479e65a8fc589c66159a00473e2a4a80ab0f7b3885f63fd92345121bac15c9/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -46,6 +51,10 @@ local Games = {
     [126042865144779] = sniperArena, -- Match Sub-Place
     [122446657157717] = sniperArena, -- Lobby Sub-Place
     [9534705677]      = sniperArena, -- GameId / UniverseId
+
+    -- Roblox Stock Exchange 2
+    [110527353762049] = robloxStockExchange2, -- Main Place
+    [10495391267]     = robloxStockExchange2, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -57,6 +66,8 @@ if not matchedGame then
         matchedGame = cheatDuringTest
     elseif currentGameId == 9534705677 or currentPlaceId == 119259569670784 or currentPlaceId == 126042865144779 or currentPlaceId == 122446657157717 then
         matchedGame = sniperArena
+    elseif currentGameId == 10495391267 or currentPlaceId == 110527353762049 then
+        matchedGame = robloxStockExchange2
     end
 end
 
