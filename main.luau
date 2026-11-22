@@ -49,6 +49,11 @@ local fisch = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/bfbc6676e8458af87013da2348c1e7553e2f0ebca674d784c91ab09e58b83b22/download"
 }
 
+local solveTheCube = {
+    name = "Solve The Cube",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/e5aeb6002b88aa8e72e347482f023ee2d2c60710a95976a4ad9fb9ffcb6cf44e/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -74,6 +79,10 @@ local Games = {
     [6701277882]      = fisch, -- Active Fisch GameId / UniverseId
     [16732694052]     = fisch, -- Root Place
     [5750914919]      = fisch, -- UniverseId
+
+    -- Solve The Cube
+    [104488514364885] = solveTheCube, -- Active PlaceId
+    [10769259605]     = solveTheCube, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -91,6 +100,8 @@ if not matchedGame then
         matchedGame = dandysWorld
     elseif currentGameId == 6701277882 or currentPlaceId == 121864768012064 or currentGameId == 5750914919 or currentPlaceId == 16732694052 then
         matchedGame = fisch
+    elseif currentGameId == 10769259605 or currentPlaceId == 104488514364885 then
+        matchedGame = solveTheCube
     end
 end
 
