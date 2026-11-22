@@ -84,6 +84,12 @@ local voxelWars = {
     keyless = true
 }
 
+local respectPVP = {
+    name = "Respect PVP",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/c95b100fe6d6b31934506e28e3a8a99e3c795b67b5c369f8498e8a745928eb34/download",
+    keyless = true
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -129,6 +135,10 @@ local Games = {
     -- Voxel Wars
     [78884249003161]  = voxelWars, -- Active PlaceId
     [10773416193]     = voxelWars, -- GameId / UniverseId
+
+    -- Respect PVP
+    [103921126484906] = respectPVP, -- Active PlaceId
+    [10772490127]     = respectPVP, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -156,6 +166,8 @@ if not matchedGame then
         matchedGame = unstableSMP
     elseif currentGameId == 10773416193 or currentPlaceId == 78884249003161 then
         matchedGame = voxelWars
+    elseif currentGameId == 10772490127 or currentPlaceId == 103921126484906 then
+        matchedGame = respectPVP
     end
 end
 
