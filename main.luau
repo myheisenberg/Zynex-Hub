@@ -54,6 +54,11 @@ local solveTheCube = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/e5aeb6002b88aa8e72e347482f023ee2d2c60710a95976a4ad9fb9ffcb6cf44e/download"
 }
 
+local ragdollPlayground = {
+    name = "Ragdoll Playground",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/7129d32efe7445cbf4cfa7d98a17da324c0683a90099f0d82538644eddcec7b8/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -83,6 +88,10 @@ local Games = {
     -- Solve The Cube
     [104488514364885] = solveTheCube, -- Active PlaceId
     [10769259605]     = solveTheCube, -- GameId / UniverseId
+
+    -- Ragdoll Playground
+    [106521346673466] = ragdollPlayground, -- Active PlaceId
+    [10768383600]     = ragdollPlayground, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -102,6 +111,8 @@ if not matchedGame then
         matchedGame = fisch
     elseif currentGameId == 10769259605 or currentPlaceId == 104488514364885 then
         matchedGame = solveTheCube
+    elseif currentGameId == 10768383600 or currentPlaceId == 106521346673466 then
+        matchedGame = ragdollPlayground
     end
 end
 
