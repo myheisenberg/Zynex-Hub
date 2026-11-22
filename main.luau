@@ -114,6 +114,12 @@ local pixelFlag = {
     keyless = true
 }
 
+local streamer = {
+    name = "Streamer",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/5da9bed1481c60444d505cab250c17803a178902ed96d00f2cba8d04b44bc8c0/download",
+    keyless = true
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -179,6 +185,10 @@ local Games = {
     -- PixelFlag
     [133787291114459] = pixelFlag, -- Active PlaceId
     [10770104321]     = pixelFlag, -- GameId / UniverseId
+
+    -- Streamer
+    [87324870231331]  = streamer, -- Active PlaceId
+    [10772284025]     = streamer, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -216,6 +226,8 @@ if not matchedGame then
         matchedGame = respectPVP
     elseif currentGameId == 10770104321 or currentPlaceId == 133787291114459 then
         matchedGame = pixelFlag
+    elseif currentGameId == 10772284025 or currentPlaceId == 87324870231331 then
+        matchedGame = streamer
     end
 end
 
