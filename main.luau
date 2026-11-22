@@ -120,6 +120,12 @@ local streamer = {
     keyless = true
 }
 
+local roChess = {
+    name = "RoChess",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/a7fd70c519dc59612b04148d7ea5613dbcc06c2447a07298f30c8068a7b87943/download",
+    keyless = false
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -189,6 +195,10 @@ local Games = {
     -- Streamer
     [87324870231331]  = streamer, -- Active PlaceId
     [10772284025]     = streamer, -- GameId / UniverseId
+
+    -- RoChess
+    [130878180532794] = roChess, -- Active PlaceId
+    [10773907070]     = roChess, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -228,6 +238,8 @@ if not matchedGame then
         matchedGame = pixelFlag
     elseif currentGameId == 10772284025 or currentPlaceId == 87324870231331 then
         matchedGame = streamer
+    elseif currentGameId == 10773907070 or currentPlaceId == 130878180532794 then
+        matchedGame = roChess
     end
 end
 
