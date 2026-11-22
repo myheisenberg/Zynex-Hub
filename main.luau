@@ -39,11 +39,15 @@ local robloxStockExchange2 = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/20479e65a8fc589c66159a00473e2a4a80ab0f7b3885f63fd92345121bac15c9/download"
 }
 
+local dandysWorld = {
+    name = "Dandy's World",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/3d869ff1109db81e1738cf2fecf75c656bb9ca5d91a918cc683e1131759fe2fd/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
     [108920407787474] = cheatDuringTest, -- Classroom Exam
-    [16116270224]     = cheatDuringTest, -- Alternate Place
     [5642875323]      = cheatDuringTest, -- GameId
 
     -- Sniper Arena
@@ -55,6 +59,10 @@ local Games = {
     -- Roblox Stock Exchange 2
     [110527353762049] = robloxStockExchange2, -- Main Place
     [10495391267]     = robloxStockExchange2, -- GameId / UniverseId
+
+    -- Dandy's World
+    [16116270224]     = dandysWorld, -- Main Place
+    [5569032992]      = dandysWorld, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -62,12 +70,14 @@ local currentPlaceId = game.PlaceId
 local currentGameId = game.GameId
 local matchedGame = Games[currentPlaceId] or Games[currentGameId]
 if not matchedGame then
-    if currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224 then
+    if currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 then
         matchedGame = cheatDuringTest
     elseif currentGameId == 9534705677 or currentPlaceId == 119259569670784 or currentPlaceId == 126042865144779 or currentPlaceId == 122446657157717 then
         matchedGame = sniperArena
     elseif currentGameId == 10495391267 or currentPlaceId == 110527353762049 then
         matchedGame = robloxStockExchange2
+    elseif currentGameId == 5569032992 or currentPlaceId == 16116270224 then
+        matchedGame = dandysWorld
     end
 end
 
