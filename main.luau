@@ -64,6 +64,11 @@ local chessDuels = {
     url = "https://api.jnkie.com/api/v1/luascripts/public/4bac3b2ec5c89f3d0471ac4d257086fcf2dda83fa9de8a1342c21dea3eec56e3/download"
 }
 
+local unstableSMP = {
+    name = "Unstable SMP",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/cd3e9fe99fb58b5b4eb32d2a98393cbadcf1050b83388380782da06148303c9d/download"
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -101,6 +106,10 @@ local Games = {
     -- Chess Duels
     [89083628291452]  = chessDuels, -- Active PlaceId
     [10773277140]     = chessDuels, -- GameId / UniverseId
+
+    -- Unstable SMP
+    [76870565041704]  = unstableSMP, -- Active PlaceId
+    [10772281976]     = unstableSMP, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -124,6 +133,8 @@ if not matchedGame then
         matchedGame = ragdollPlayground
     elseif currentGameId == 10773277140 or currentPlaceId == 89083628291452 then
         matchedGame = chessDuels
+    elseif currentGameId == 10772281976 or currentPlaceId == 76870565041704 then
+        matchedGame = unstableSMP
     end
 end
 
