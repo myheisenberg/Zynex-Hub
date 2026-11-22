@@ -8,6 +8,12 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+-- Teleport Persistence
+local qot = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+if type(qot) == "function" then
+    pcall(qot, 'loadstring(game:HttpGet("https://raw.githubusercontent.com/myheisenberg/Zynex-Hub/main/loader.luau"))()')
+end
+
 -- Services
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
@@ -41,25 +47,6 @@ local currentGameId = game.GameId
 local matchedGame = Games[currentPlaceId] or Games[currentGameId]
 if not matchedGame and (currentGameId == 5642875323 or currentPlaceId == 98894876188248 or currentPlaceId == 108920407787474 or currentPlaceId == 16116270224) then
     matchedGame = Games[98894876188248]
-end
-
--- If this game is NOT supported, NEVER open Key GUI! Silently notify and exit.
-if not matchedGame then
-    pcall(function()
-        local StarterGui = game:GetService("StarterGui")
-        StarterGui:SetCore("SendNotification", {
-            Title = "Zynex Hub",
-            Text = "Game not supported yet! (PlaceId: " .. tostring(currentPlaceId) .. ")",
-            Duration = 5
-        })
-    end)
-    return
-end
-
--- Teleport Persistence (ONLY for supported games)
-local qot = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-if type(qot) == "function" then
-    pcall(qot, 'loadstring(game:HttpGet("https://raw.githubusercontent.com/myheisenberg/Zynex-Hub/main/loader.luau"))()')
 end
 
 -- Clipboard Helper
