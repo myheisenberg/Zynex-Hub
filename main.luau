@@ -144,6 +144,12 @@ local drawTheOtherHalf = {
     keyless = true
 }
 
+local murderersVsSheriffs = {
+    name = "Murderers VS Sheriffs",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/76fcb3b9ea409ff6cdae282e7706e9b3c3f1aa9df7e5b86b2c9d0163d6ff260d/download",
+    keyless = false
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -229,6 +235,19 @@ local Games = {
     -- Draw The Other Half
     [122701511178560] = drawTheOtherHalf, -- Active PlaceId
     [10773244575]     = drawTheOtherHalf, -- GameId / UniverseId
+
+    -- Murderers VS Sheriffs
+    [135856908115931] = murderersVsSheriffs, -- Main Place
+    [7219654364]      = murderersVsSheriffs, -- GameId / UniverseId
+    [74084441161738]  = murderersVsSheriffs,
+    [81344624573389]  = murderersVsSheriffs,
+    [92876937625630]  = murderersVsSheriffs,
+    [97251114306253]  = murderersVsSheriffs,
+    [101617670515690] = murderersVsSheriffs,
+    [114176825419426] = murderersVsSheriffs,
+    [123627218337521] = murderersVsSheriffs,
+    [124848751642883] = murderersVsSheriffs,
+    [137570376387995] = murderersVsSheriffs,
 }
 
 -- Game Detection
@@ -276,6 +295,8 @@ if not matchedGame then
         matchedGame = wordPlay
     elseif currentGameId == 10773244575 or currentPlaceId == 122701511178560 then
         matchedGame = drawTheOtherHalf
+    elseif currentGameId == 7219654364 or currentPlaceId == 135856908115931 then
+        matchedGame = murderersVsSheriffs
     end
 end
 
