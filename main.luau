@@ -17,7 +17,7 @@ local LocalPlayer = Players.LocalPlayer
 
 -- Configuration
 local KEY_FILE = "Zynex_Key.txt"
-local FLOW_URL = "https://jnkie.com/flow/dfd5b395-0d38-49a0-8b06-7a21c7666edd"
+local FLOW_URL = "https://jnkie.com/get-key/zynexhub"
 local DISCORD_URL = "https://discord.gg/ehbX2MVbTw"
 local SERVICE_ID = "117785"
 local IDENTIFIER = "1239891"
