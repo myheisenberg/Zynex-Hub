@@ -300,6 +300,19 @@ if not matchedGame then
     end
 end
 
+-- If game is not supported, notify and exit (never show Key GUI for unsupported games!)
+if not matchedGame then
+    warn("[Zynex Hub] Unsupported game. PlaceId: " .. tostring(currentPlaceId) .. " | GameId: " .. tostring(currentGameId))
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Zynex Hub",
+            Text = "Game not supported! (Place: " .. tostring(currentPlaceId) .. ")",
+            Duration = 6
+        })
+    end)
+    return
+end
+
 -- Clipboard Helper
 local function CopyToClipboard(text)
     if setclipboard then
