@@ -150,6 +150,12 @@ local murderersVsSheriffs = {
     keyless = false
 }
 
+local blockTower = {
+    name = "Block Tower",
+    url = "https://api.jnkie.com/api/v1/luascripts/public/53479250f27f0ad207fc2f1894f8bd3cab02b21b7df8022b6a42ba90d62db87a/download",
+    keyless = false
+}
+
 local Games = {
     -- Cheat During Test
     [98894876188248]  = cheatDuringTest, -- Lobby / Main Menu
@@ -248,6 +254,10 @@ local Games = {
     [123627218337521] = murderersVsSheriffs,
     [124848751642883] = murderersVsSheriffs,
     [137570376387995] = murderersVsSheriffs,
+
+    -- Block Tower
+    [138940214958285] = blockTower, -- Main Place
+    [10773749924]     = blockTower, -- GameId / UniverseId
 }
 
 -- Game Detection
@@ -297,6 +307,8 @@ if not matchedGame then
         matchedGame = drawTheOtherHalf
     elseif currentGameId == 7219654364 or currentPlaceId == 135856908115931 then
         matchedGame = murderersVsSheriffs
+    elseif currentGameId == 10773749924 or currentPlaceId == 138940214958285 then
+        matchedGame = blockTower
     end
 end
 
