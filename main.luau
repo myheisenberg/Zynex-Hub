@@ -359,7 +359,8 @@ local function CheckWhitelist(key)
     if not key or key == "" then
         return false, "Key cannot be empty"
     end
-    local trimmed = key:match("^%s*(.-)%s*$")
+    -- Auto-clean: remove all spaces, tabs, newlines, and hidden characters
+    local trimmed = tostring(key):gsub("%s+", ""):gsub("[\r\n\t]", "")
     if not trimmed or trimmed == "" then
         return false, "Key cannot be empty"
     end
@@ -389,6 +390,7 @@ end
 
 -- Launch Script Directly
 local function LaunchMainScript(key)
+    key = tostring(key):gsub("%s+", ""):gsub("[\r\n\t]", "")
     getgenv().SCRIPT_KEY = key
     if writefile then
         pcall(writefile, KEY_FILE, key)
@@ -410,7 +412,7 @@ if isfile and readfile and isfile(KEY_FILE) then
     pcall(function()
         local k = readfile(KEY_FILE)
         if k then
-            k = k:match("^%s*(.-)%s*$")
+            k = tostring(k):gsub("%s+", ""):gsub("[\r\n\t]", "")
             if k and #k > 3 then
                 saved = k
             end
