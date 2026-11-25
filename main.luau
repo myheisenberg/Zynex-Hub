@@ -392,7 +392,7 @@ end
 local function LaunchMainScript(key)
     key = tostring(key):gsub("%s+", ""):gsub("[\r\n\t]", "")
     getgenv().SCRIPT_KEY = key
-    if writefile then
+    if writefile and key ~= "" and key ~= "KEYLESS" then
         pcall(writefile, KEY_FILE, key)
     end
     if matchedGame then
@@ -413,7 +413,7 @@ if isfile and readfile and isfile(KEY_FILE) then
         local k = readfile(KEY_FILE)
         if k then
             k = tostring(k):gsub("%s+", ""):gsub("[\r\n\t]", "")
-            if k and #k > 3 then
+            if k and #k > 3 and k ~= "KEYLESS" then
                 saved = k
             end
         end
